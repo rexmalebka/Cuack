@@ -1,0 +1,17 @@
+{
+  "name": "livetag",
+  "version": "1.0.0",
+  "description": "pruebas de livecoding con javascript",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "rexmalebka",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "ejs": "^2.6.2",
+    "express": "^4.17.1",
+    "nanotimer": "^0.3.15",
+    "osc": "^2.3.1"
+  }
+}
