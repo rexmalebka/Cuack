@@ -2,7 +2,7 @@ const express = require('express'),
 	app = express(),
 	path = require('path'),
 	webSocket = require('ws'),
-	gen = require('./Supercollider/gen.js'),
+	gen = require('./generate.js'),
 	OSCserver = require('./OSCserver.js'),
 	Clock = require('./ClockTempo.js');
 	//SClang = require('./SCrun.js');
@@ -18,6 +18,9 @@ app.get('/', function(req, res){
 	res.sendFile(path.join(__dirname+'/views/index.html'));
 });
 
+app.get('/prueba', function(req, res){
+	res.sendFile(path.join(__dirname+'/views/prueba.html'));
+});
 
 let webserver = app.listen(3000, function () {
   console.log('> web server started, listening on port 3000');

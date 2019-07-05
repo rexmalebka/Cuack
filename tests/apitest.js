@@ -38,12 +38,16 @@ player(
 ).play({amp:2, mode:"add"})[0][0].amp
 )
 */
-
+/*
 console.log(
 	player(
 		[synth({amp:5, rate:5})]
-	).play({amp:10,mode:"add"}, {rate:2, mode:"mult"})
+	).play({amp:10,mode:"add"}, {rate:2, mode:"mult"})[0][0].amp
 );
-
+*/
+/*
+let t1 = [synth, synth].eve({3:{rate:3, mode:"add"}})
+console.log(t1[1].eve)
+*/
 
 

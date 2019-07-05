@@ -1,82 +1,123 @@
 const Player = function(name){
-	this._name = name;
+	function callable(...args){
+		callable.sequences = args.map((arg)=>parse(arg));
+		return callable
+	}
 
-	this.cat = function(){
-		//concatenate a sequencer
-	};
+	function parse(seq){
 
-	this.stack = function(){
-	};
+		function itparse(seq, lvl=1){
+			let seqp = [];
+			let len = seq.length * lvl;
 
-	this.all = function(prop){
-		// reference to all 
-		this._sequence.forEach(function(seq){
-			seq.forEach(function(synth){
-				for (var key in prop){
-					if(key != "mode"){
-						if(prop.mode == "add"){
-							synth.prop[key] += prop[key];
-						}else if(prop.mode == "subs"){
-							synth.prop[key] -= prop[key];
-						}else if(prop.mode == "mult"){
-							synth.prop[key] *= prop[key];
-						}else{
-							synth.prop[key] = prop[key];
+			while(seq.length > 0){
+				let l = seq.shift();
+				if(!Array.isArray(l)){
+					
+					seqp.push(l({dur: 1/len}));
+				}else{
+					seqp.push(itparse(l, len));
+				}
+			}
+			return seqp
+		}
+
+		let seqp = itparse(seq);
+		
+		while( seqp.some((x)=>{return Array.isArray(x)})){
+			seqp = [].concat(...seqp)
+		}
+		return seqp
+
+	}
+
+	function play(...args){
+		args.forEach(function(arg){
+			if(arg.hasOwnProperty("mode")){
+				if(arg.mode == "add"){
+					for(key in arg ){
+						if(key != "mode" ){
+							callable.sequences = callable.sequences.map(function(seq){
+								return seq.map(function(synth){
+									return synth({[key]: (synth[key]+ arg[key])})
+								})
+							});
+						}
+					}
+				}else if(arg.mode == "mult"){
+					for(key in arg ){
+						if(key != "mode" ){
+							callable.sequences = callable.sequences.map(function(seq){
+								return seq.map(function(synth){
+									return synth({[key]: (synth[key] * arg[key])})
+								})
+							});
+						}
+					}
+				}else if(arg.mode == "subs"){
+					for(key in arg ){
+						if(key != "mode" ){
+							callable.sequences = callable.sequences.map(function(seq){
+								return seq.map(function(synth){
+									return synth({[key]: (synth[key] - arg[key])})
+								})
+							});
+						}
+					}
+				}else if(arg.mode == "eq"){
+					for(key in arg ){
+						if(key != "mode" ){
+							callable.sequences = callable.sequences.map(function(seq){
+								return seq.map(function(synth){
+									return synth({[key]: (synth[key] - arg[key])})
+								})
+							});
 						}
 					}
 				}
-				
-			});
-		});
-		return this
-	}.bind(this);
-
-	this.coord = function(){
-	
-	};
-
-	this.play = function(){
-		let oscmsg = this._sequence.map(function(seq){
-			return seq.map(function(synth){
-				return {prop:synth.oscgen()}
-			});
-		});
-		oscmsg = {com: "schedule",value:{name: this._name, sequences:oscmsg}};
-
-		oscmsg = JSON.stringify(oscmsg);
-		socket.send(oscmsg);
-		return oscmsg
-	}.bind(this);
-	this._sequence = [];
-	this.parse = function(seq){
-		
-		function itparse(seq, lvl=1){
-
-			let pseq = [];
-			let len = seq.length * lvl;
-
-			while( seq.length > 0){
-				let l = seq.shift();
-				if(!Array.isArray(l)){
-					pseq.push( l({dur: 1/len}) );
-				}else{
-					pseq.push(itparse(l, len));
+			}else{
+				for(key in arg ){
+					callable.sequences = callable.sequences.map(function(seq){
+						return seq.map(function(synth){
+							let synthp = synth;
+							synth[key] = arg[key];
+							return synthp
+						})
+					});
 				}
+			
 			}
-			return pseq
-		}
+		
+		});
+		return callable.sequences
+	}
 
-		return lodash.flattenDeep(itparse(seq))
-	};
+	let prop = {
+		name: "",
+		amp: 1,
+		pan: 0,
+		rate: 1,
+		atk: 0,
+		sus: 1,
+		rel: 0,
+		echo: 0,
+		delay: 0,
+		coarse: 0,
+		vowel: ''
+	}
 
-	return function(){
-		this._sequence = [];
-		let args = Array.from(arguments);
+	let sequences = [];
+	callable.sequences = [];
+	callable.prop = prop;
+	callable._prop = Object.assign({},prop);
+	callable.play = play;
 
-		for(i in args){
-			this._sequence.push(this.parse(args[i]));
-		}
-		return this
-	}.bind(this)
-};
+
+	const handler = {
+		get(){
+		},
+	}
+	return callable
+}
+
 

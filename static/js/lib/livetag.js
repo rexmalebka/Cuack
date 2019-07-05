@@ -1,24 +1,33 @@
-const lodash = _;
+const cons = document.querySelector(".console");
+
 const Clock = {
 	_bpm : 120,
-	_time : 0,
-
-	get bpm(){
-		return this._bpm;
-	},
+	globalTime : 0,
+	time:0,
+	starttime: 0,
 	set bpm(value){
-		console.log(value);
+		console.log(`> Changed Clock bpm: ${value}`);
 		this._bpm = value;
 	},
-	get time(){
-		return this._time
+	timerref : 0,
+	timer: function(){
+		Clock.globaltime = (performance.now() - Clock.starttime)/1000;
+		Clock.time = Clock.globaltime % (Clock._bpm / 60);
+		if(Clock.time > 1.98){
+			console.log("Beep")
+		}
+		Clock.timerref = requestAnimationFrame(Clock.timer);
 	},
 	start : function(){
+		Clock.starttime = performance.now();
+		Clock.timerref = requestAnimationFrame(Clock.timer);
 		return "aaaaa"
 	},
 	stop : function(){
+		cancelAnimationFrame(Clock.timerref);
 	}
 };
+
 
 const socket = new WebSocket("ws://127.0.0.1:3000");
 
@@ -45,12 +54,24 @@ const editor = CodeMirror(document.body, {
 	scrollbarStyle:null,
 	extraKeys: {
 		"Shift-Ctrl-Enter":function(){
-			console.log(editor.getValue());
-			eval(editor.getValue());
+			const text = editor.getValue();
+			try{
+				let evaluated = eval(text);
+				cons.textContent = `${text} → ${typeof evaluated}`;
+			}catch(error){
+				cons.textContent = error;
+			}
 		},
 		"Ctrl-Enter":function(f){
-			console.log(editor.getLine(editor.getCursor().line));
-			eval(editor.getLine(editor.getCursor().line));
+			const text = editor.getLine(editor.getCursor().line);
+			try{
+				let evaluated = eval(text);
+				cons.textContent = `${text} → ${typeof evaluated}`;
+			}catch(error){
+				cons.textContent = error;
+			}
+
+
 		
 		}
 		
@@ -68,3 +89,34 @@ editor.getDoc().setValue(`
 	 *
 	 */
 `);
+
+
+
+let _cp = flock.synth({
+	synthDef: {
+		id:"cp",
+		ugen: "flock.ugen.playBuffer",
+		buffer : {
+			id: "cp",
+			url: "samples/cp.wav"
+		},
+		loop : 1,
+		mult:{
+			id:"asr",
+			ugen: "flock.ugen.asr",
+			start: 0.0,
+			attack: 0.25,
+			sustain: 0.25,
+			release: 1.0,
+			gate: {
+				id:"gate",
+				ugen: "flock.ugen.impulse",
+				rate: "control",
+				freq: 0.75,
+				phase: 1.0
+			}
+		}
+			
+	}
+})
+//sources

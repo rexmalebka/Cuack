@@ -1,6 +1,19 @@
-# Supercollider + NodeJS
+# Cuack 
 
-Sequencer web server based, that allows to use native javascript objects for livecoding. 
+## Supercollider + NodeJS 
+
+Sequencer web server based, that allows to use native javascript objects for livecoding.
+
+it's still on development, still beta.
+
+![Sintax example](img/sintax.jpg "example of sintax")
+
+![Sintax example 2](img/sintax2.jpg "example of sintax")
+
+![Example players](img/players.jpg "example of console")
+
+Tried to use Flocking as backend, but could not make it work properly.
+
 
 ## requirements
 
@@ -11,6 +24,8 @@ Sequencer web server based, that allows to use native javascript objects for liv
 - Supercollider + sc3-plugins.
 
 ## Run
+
+`npm install` for install dependencies
 
 `app.js` runs a web server and a socket server on 127.0.0.1:3000.
 

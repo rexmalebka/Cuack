@@ -35,7 +35,6 @@ const Player = function(name){
 		args.forEach(function(arg){
 			if(arg.hasOwnProperty("mode")){
 				if(arg.mode == "add"){
-					console.log("adsfdsf")
 					for(key in arg ){
 						if(key != "mode" ){
 							callable.sequences = callable.sequences.map(function(seq){
@@ -46,23 +45,31 @@ const Player = function(name){
 						}
 					}
 				}else if(arg.mode == "mult"){
-					console.log("adsfdsf")
 					for(key in arg ){
 						if(key != "mode" ){
 							callable.sequences = callable.sequences.map(function(seq){
 								return seq.map(function(synth){
-									return synth({[key]: (synth[key]- arg[key])})
+									return synth({[key]: (synth[key] * arg[key])})
 								})
 							});
 						}
 					}
 				}else if(arg.mode == "subs"){
-					console.log("adsfdsf")
 					for(key in arg ){
 						if(key != "mode" ){
 							callable.sequences = callable.sequences.map(function(seq){
 								return seq.map(function(synth){
-									return synth({[key]: (synth[key]+ arg[key])})
+									return synth({[key]: (synth[key] - arg[key])})
+								})
+							});
+						}
+					}
+				}else if(arg.mode == "eq"){
+					for(key in arg ){
+						if(key != "mode" ){
+							callable.sequences = callable.sequences.map(function(seq){
+								return seq.map(function(synth){
+									return synth({[key]: (synth[key] - arg[key])})
 								})
 							});
 						}
@@ -102,6 +109,7 @@ const Player = function(name){
 	let sequences = [];
 	callable.sequences = [];
 	callable.prop = prop;
+	callable._prop = Object.assign({},prop);
 	callable.play = play;
 
 

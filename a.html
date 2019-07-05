@@ -1,0 +1,132 @@
+<h1 id="cuack">Cuack</h1>
+<h2 id="supercollider-nodejs">Supercollider + NodeJS</h2>
+<p>Sequencer web server based, that allows to use native javascript objects for livecoding.</p>
+<p>it's still on development, still beta.</p>
+<div class="figure">
+<img src="img/sintax.jpg" title="example of sintax" alt="Sintax example" />
+<p class="caption">Sintax example</p>
+</div>
+<div class="figure">
+<img src="img/sintax2.jpg" title="example of sintax" alt="Sintax example 2" />
+<p class="caption">Sintax example 2</p>
+</div>
+<div class="figure">
+<img src="img/players.jpg" title="example of console" alt="Example players" />
+<p class="caption">Example players</p>
+</div>
+<p>Tried to use Flocking as backend, but could not make it work properly.</p>
+<h2 id="requirements">requirements</h2>
+<ul class="incremental">
+<li>express</li>
+<li>ws</li>
+<li>osc</li>
+<li>nanotimer</li>
+<li>Supercollider + sc3-plugins.</li>
+</ul>
+<h2 id="run">Run</h2>
+<p><code>npm install</code> for install dependencies</p>
+<p><code>app.js</code> runs a web server and a socket server on 127.0.0.1:3000.</p>
+<p><code>Supercollider/main.scd</code> runs the Supercolider Server, locking audio output,</p>
+<h2 id="player-object">Player object</h2>
+<p>Calculates timing and sets properties for individuals synths and harmonics.</p>
+<pre><code>// available default players: p1, p2, p3, p4, p5
+
+let myplayer = new Player(&quot;custom&quot;);
+
+myplayer().play();
+</code></pre>
+<h2 id="sampledef-object">SampleDef object</h2>
+<p>Holds music properties for sample objects that can change on the fly, available samples are on <code>samples/</code> folder, these are loaded when the app runs.</p>
+<p>At the moment it's not possible to load samples on the fly.</p>
+<pre><code>cp({amp:2}).prop
+
+/*
+
+Object {
+ type: &quot;SampleDef&quot;,
+ name: &quot;cp&quot;,
+ filename: &quot;cp.wav&quot;,
+ amp: 3,
+ pan: 0,
+ rate: 1,
+ attk: 0,
+ sus: 1,
+ rel: 0,
+ dur: 0, 
+ bus: 0
+ }
+
+ */
+</code></pre>
+<h2 id="synthdef">SynthDef</h2>
+<p>Holds music properties for Synth objects that can change on the fly, available synths are on <code>synths/</code> folder, these are loaded when the app runs.</p>
+<p>At the moment it's not possible to use Synthdefs.</p>
+<h2 id="tutorial">Tutorial</h2>
+<p>This creates a harmony, triggering a &quot;cp&quot; sample with the default bpm (120) on player &quot;p1&quot;.</p>
+<pre><code>p1(
+    [cp]
+).play();</code></pre>
+<p>The duration of each synth is automatically stretched to fill 1 tempo evenly, this example returns a harmony with two equal &quot;cp&quot; samples, durations are: <code>[0.5, 0.5]</code>.</p>
+<pre><code>p1(
+    [cp, cp]
+).play();</code></pre>
+<p>Arrays are meant to stretch the sound evenly, this example returns a harmony of durations: <code>[0.5, 0.25, 0.25]</code></p>
+<pre><code>p1(
+    [cp, [cp, cp]]
+).play();</code></pre>
+<p>The durations are calculated recursively, flattening to a complex harmony array.</p>
+<pre><code>p1(
+    [cp, [cp,cp,[cp, cp] ]]
+).play();</code></pre>
+<pre><code>/*
+[ 0.5, [ 0.5 ] ]
+
+[0.5, [ 0.1666, 0.1666 [ 0.1666 ] ] ]
+
+[0.5, [ 0.1666, 0.1666 [ 0.0833 0.0833 ] ] ]
+
+[0.5, [ 0.1666, 0.1666 0.0833 0.0833 ] ]
+
+[ 0.5, 0.1666, 0.1666, 0.0833, 0.0833 ]
+*/</code></pre>
+<p>Harmonies can be made, adding arrays in the player as arguments, this plays two sounds at the same time.</p>
+<pre><code>p1(
+    [cp, cp],
+    [sn, sn]
+).play();</code></pre>
+<p>Synths can be repeated with:</p>
+<pre><code>p1(
+    cp.rep(4) // [cp, cp, cp, cp]
+).play();</code></pre>
+<p>To modify properties of a note:</p>
+<pre><code>cp({amp:2, pan:-1, rate:3}) 
+</code></pre>
+<p>or even:</p>
+<pre><code>cp.rep(3,{rate:3}) // 3 synths with rate = 3</code></pre>
+<p>we can modify the entire sequence:</p>
+<pre><code>p1(
+  [cp, [sn, sn], cp],
+  [sn, drum.rep(8)]
+).all({rate:3}).play();</code></pre>
+<p>if we pass a mode we can add / substract / multiply properties instead of replacing.</p>
+<pre><code>p1(
+  [cp({amp:2}), [sn({rate:3}), sn], cp],
+  [sn, drum.rep(8)]
+).all(
+        {rate:1, amp:2, mode:&quot;add&quot;} // modes: add, subs, mult 
+    ).play();</code></pre>
+<h2 id="todo">TODO</h2>
+<ul class="incremental">
+<li>Think of the language.</li>
+<li>Choose a cool name.</li>
+<li>Codemirror code input.</li>
+<li>Add support for loading samples on the fly.</li>
+<li>Add support for effects in Supercollider.</li>
+<li>Test with Pdef sequencers in Supercollider</li>
+<li>Add support for scales.</li>
+<li>Add examples.</li>
+<li>Add support for native functions for synths controling.</li>
+<li>Documentation.</li>
+<li>Improve websocket implementation.</li>
+<li>Secure OSC Connections</li>
+</ul>

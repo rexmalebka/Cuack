@@ -1,23 +1,25 @@
 const osc = require('osc');
+const config = require('./config.js');
 
-let udpPort = new osc.UDPPort({
-	localAddress: "127.0.0.1",
-	localPort: 57121,
-	remoteAddress: "127.0.0.1",
-	remotePort: 7771,
+let OSCClient = new osc.UDPPort({
+	localAddress: config.OSCLocalAddr,
+	localPort: config.OSCLocalPort,
+	remoteAddress: config.SCAddr,
+	remotePort: config.SCPort,
 	metadata : false
 });
 
-udpPort.open();
+console.log("config: ",config)
+OSCClient.open();
 
 let prop = {dur: 1, amp:2, rate:4, name:"cp"};
 prop = Object.keys(prop).map(function(key){ return [key, prop[key]]});
 
-udpPort.on("ready", function () {
-    udpPort.send({
-        address: "/play",
-        args: ["d1"].concat([].concat(...prop))
-    }, "127.0.0.1", 7771);
+OSCClient.on("ready", function () {
+    OSCClient.send({
+        address: "/Cuack.sched",
+        args: ["hola","asdf","que","pedo"]
+    }, config.SCAddr, config.SCPort);
 	
 });
 
