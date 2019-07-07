@@ -31,14 +31,19 @@ const wss = new webSocket.Server({server : webserver});
 
 wss.on('connection', function connection(ws) {
 	ws.on('message', function incoming(message){
-		let msg = JSON.parse(message); // TODO possible error if parsing bad websocket message
-		/*
-		 * TODO: websocket commands for getting clock information, updating params, etc;
-		 */
-		if(msg.com == "getClockbpm"){
+		let msg = {};
+		try{
+			msg = JSON.parse(message); 
+		}catch(err){
+			console.log("> Error parsing json")
+			msg = {};
+		};
+		
+		if(msg.com == "Cuack.getClock"){
 			ws.send(JSON.stringify({com:"getClockbpm",value:Clock.bpm}));
-		}else if(msg.com == "schedule"){
-			Clock.update(msg.value);
+		}else if(msg.com == "Cuack.sched"){
+			console.log("Cuack: scheduling.")
+			OSCserver.sendsynth(msg);
 		}
 	});
 	ws.send(JSON.stringify({com:"status", value:'connected'}));

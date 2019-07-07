@@ -1,0 +1,16 @@
+Dictionary.newFrom([
+"_banshee" , Buffer.read(Server.default,"/home/rexmalebka/.local/share/SuperCollider/Extensions/Cuack/samples/banshee.wav"),
+"_banshee2" , Buffer.read(Server.default,"/home/rexmalebka/.local/share/SuperCollider/Extensions/Cuack/samples/banshee2.wav"),
+"_banshee3" , Buffer.read(Server.default,"/home/rexmalebka/.local/share/SuperCollider/Extensions/Cuack/samples/banshee3.wav"),
+"_cb" , Buffer.read(Server.default,"/home/rexmalebka/.local/share/SuperCollider/Extensions/Cuack/samples/cb.wav"),
+"_celesta" , Buffer.read(Server.default,"/home/rexmalebka/.local/share/SuperCollider/Extensions/Cuack/samples/celesta.wav"),
+"_cp" , Buffer.read(Server.default,"/home/rexmalebka/.local/share/SuperCollider/Extensions/Cuack/samples/cp.wav"),
+"_drum" , Buffer.read(Server.default,"/home/rexmalebka/.local/share/SuperCollider/Extensions/Cuack/samples/drum.wav"),
+"_hardkick" , Buffer.read(Server.default,"/home/rexmalebka/.local/share/SuperCollider/Extensions/Cuack/samples/hardkick.wav"),
+"_hh" , Buffer.read(Server.default,"/home/rexmalebka/.local/share/SuperCollider/Extensions/Cuack/samples/hh.wav"),
+"_piano" , Buffer.read(Server.default,"/home/rexmalebka/.local/share/SuperCollider/Extensions/Cuack/samples/piano.wav"),
+"_popkick" , Buffer.read(Server.default,"/home/rexmalebka/.local/share/SuperCollider/Extensions/Cuack/samples/popkick.wav"),
+"_sn" , Buffer.read(Server.default,"/home/rexmalebka/.local/share/SuperCollider/Extensions/Cuack/samples/sn.wav"),
+"_trumpet" , Buffer.read(Server.default,"/home/rexmalebka/.local/share/SuperCollider/Extensions/Cuack/samples/trumpet.wav"),
+"_weg1" , Buffer.read(Server.default,"/home/rexmalebka/.local/share/SuperCollider/Extensions/Cuack/samples/weg1.wav"),
+]);

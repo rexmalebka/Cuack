@@ -62,10 +62,11 @@ const SampleDef = function(name, filename,...args){
 	let prop = {
 		name : name,
 		filename : filename,
+		type : "SampleDef",
 		dur : 1,
 		amp: 1,
 		pan: 0,
-		rate: 1,
+		up: 1,
 		atk:0,
 		sus:1,
 		rel:0,

@@ -32,13 +32,19 @@ const Clock = {
 const socket = new WebSocket("ws://127.0.0.1:3000");
 
 socket.onopen = function(){
-	console.log("open connection");
+	console.log("socket connection opened.");
 };
+
+socket.onclose = function(){
+	console.log("socket connection closed.")
+}
 
 socket.onmessage = function(message){
 	let msg = JSON.parse(message.data);
 	if(msg.com == "setClockbpm"){
 		Clock.bpm = msg.value; 
+	}else{
+	
 	}
 };
 
@@ -69,12 +75,8 @@ const editor = CodeMirror(document.body, {
 				cons.textContent = `${text} → ${typeof evaluated}`;
 			}catch(error){
 				cons.textContent = error;
-			}
-
-
-		
+			}	
 		}
-		
 	}
 });
 
@@ -92,31 +94,3 @@ editor.getDoc().setValue(`
 
 
 
-let _cp = flock.synth({
-	synthDef: {
-		id:"cp",
-		ugen: "flock.ugen.playBuffer",
-		buffer : {
-			id: "cp",
-			url: "samples/cp.wav"
-		},
-		loop : 1,
-		mult:{
-			id:"asr",
-			ugen: "flock.ugen.asr",
-			start: 0.0,
-			attack: 0.25,
-			sustain: 0.25,
-			release: 1.0,
-			gate: {
-				id:"gate",
-				ugen: "flock.ugen.impulse",
-				rate: "control",
-				freq: 0.75,
-				phase: 1.0
-			}
-		}
-			
-	}
-})
-//sources

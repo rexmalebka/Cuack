@@ -1,7 +1,7 @@
 <h1 id="cuack">Cuack</h1>
 <h2 id="supercollider-nodejs">Supercollider + NodeJS</h2>
 <p>Sequencer web server based, that allows to use native javascript objects for livecoding.</p>
-<p>it's still on development, still beta.</p>
+<p>it's still on development, still beta, I'm taking suggestions about musical notations, language and bug fixes.</p>
 <div class="figure">
 <img src="img/sintax.jpg" title="example of sintax" alt="Sintax example" />
 <p class="caption">Sintax example</p>
@@ -14,7 +14,13 @@
 <img src="img/players.jpg" title="example of console" alt="Example players" />
 <p class="caption">Example players</p>
 </div>
-<p>Tried to use Flocking as backend, but could not make it work properly.</p>
+<h2 id="related-work">Related work</h2>
+<ul class="incremental">
+<li>Flocking</li>
+<li>Tidalcycles</li>
+<li>FoxDot</li>
+<li>MIDI.js</li>
+</ul>
 <h2 id="requirements">requirements</h2>
 <ul class="incremental">
 <li>express</li>
@@ -24,9 +30,10 @@
 <li>Supercollider + sc3-plugins.</li>
 </ul>
 <h2 id="run">Run</h2>
+<p>Copy the <code>Cuack</code> class folder to <code>Platform.userExtensionDir</code></p>
 <p><code>npm install</code> for install dependencies</p>
 <p><code>app.js</code> runs a web server and a socket server on 127.0.0.1:3000.</p>
-<p><code>Supercollider/main.scd</code> runs the Supercolider Server, locking audio output,</p>
+<p>Run <code>Cuack.start</code> on SuperCollider</p>
 <h2 id="player-object">Player object</h2>
 <p>Calculates timing and sets properties for individuals synths and harmonics.</p>
 <pre><code>// available default players: p1, p2, p3, p4, p5
@@ -48,12 +55,14 @@ Object {
  filename: &quot;cp.wav&quot;,
  amp: 3,
  pan: 0,
- rate: 1,
- attk: 0,
+ up: 0,
+ atk: 0,
  sus: 1,
  rel: 0,
  dur: 0, 
- bus: 0
+ echo: 0,
+ delay: 0,
+ coarse: 0,
  }
 
  */

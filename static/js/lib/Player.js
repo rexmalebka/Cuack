@@ -38,6 +38,7 @@ const Player = function(name){
 					for(key in arg ){
 						if(key != "mode" ){
 							callable.sequences = callable.sequences.map(function(seq){
+								console.log("AAAAAAA");
 								return seq.map(function(synth){
 									return synth({[key]: (synth[key]+ arg[key])})
 								})
@@ -89,11 +90,32 @@ const Player = function(name){
 			}
 		
 		});
-		return callable.sequences
+
+		let seqp = callable.sequences.map(function(harm){
+			return harm.map(function(synth){
+				return synth.prop
+			});
+		});
+
+		seqp = seqp.map(function(harm){
+				return harm.map(function(synth){
+					// TODO implement eve entry
+					delete synth.eve
+					return [].concat(...Object.entries(synth))
+				})
+			})
+
+		socket.send(JSON.stringify({
+			com: "Cuack.sched",
+			value: seqp,
+			player: this.prop.name
+		}));
+
+		return seqp
 	}
 
 	let prop = {
-		name: "",
+		name: name || "",
 		amp: 1,
 		pan: 0,
 		rate: 1,

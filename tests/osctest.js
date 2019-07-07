@@ -18,7 +18,7 @@ prop = Object.keys(prop).map(function(key){ return [key, prop[key]]});
 OSCClient.on("ready", function () {
     OSCClient.send({
         address: "/Cuack.sched",
-        args: ["hola","asdf","que","pedo"]
+        args: '["p2",[["name","cp","dur", 0.25],["name","ooo","dur", 0.25]]]'    
     }, config.SCAddr, config.SCPort);
 	
 });

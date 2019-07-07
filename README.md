@@ -4,7 +4,7 @@
 
 Sequencer web server based, that allows to use native javascript objects for livecoding.
 
-it's still on development, still beta.
+it's still on development, still beta, I'm taking suggestions about musical notations, language and bug fixes.
 
 ![Sintax example](img/sintax.jpg "example of sintax")
 
@@ -12,7 +12,12 @@ it's still on development, still beta.
 
 ![Example players](img/players.jpg "example of console")
 
-Tried to use Flocking as backend, but could not make it work properly.
+## Related work
+
+- Flocking 
+- Tidalcycles
+- FoxDot
+- MIDI.js
 
 
 ## requirements
@@ -25,11 +30,15 @@ Tried to use Flocking as backend, but could not make it work properly.
 
 ## Run
 
+Copy the `Cuack` class folder to `Platform.userExtensionDir`
+
+
 `npm install` for install dependencies
+
 
 `app.js` runs a web server and a socket server on 127.0.0.1:3000.
 
-`Supercollider/main.scd` runs the Supercolider Server, locking audio output, 
+Run `Cuack.start` on SuperCollider
 
 ## Player object
 
@@ -62,12 +71,14 @@ Object {
  filename: "cp.wav",
  amp: 3,
  pan: 0,
- rate: 1,
- attk: 0,
+ up: 0,
+ atk: 0,
  sus: 1,
  rel: 0,
  dur: 0, 
- bus: 0
+ echo: 0,
+ delay: 0,
+ coarse: 0,
  }
 
  */
@@ -180,8 +191,6 @@ p1(
 ## TODO
 
 - Think of the language.
-- Choose a cool name.
-- Codemirror code input.
 - Add support for loading samples on the fly.
 - Add support for effects in Supercollider.
 - Test with Pdef sequencers in Supercollider
@@ -190,5 +199,7 @@ p1(
 - Add support for native functions for synths controling.
 - Documentation.
 - Improve websocket implementation.
-- Secure OSC Connections
+- Secure OSC Connections.
+- Nodejs livecoding.
+- Atom livecoding would be cool.
 
