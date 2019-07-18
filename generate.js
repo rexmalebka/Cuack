@@ -22,6 +22,12 @@ for(var k=1;k<6;k++){
 	});
 }
 
+fs.appendFileSync("static/js/functions.js",`\nlet _ = new SampleDef("_","_");\n`,function(err){
+	if(err){
+		console.log("> Error writing to function file.");
+	}
+});
+
 
 fs.readdir(config.SamplesDir,function(err, item, s){
 	if(err){

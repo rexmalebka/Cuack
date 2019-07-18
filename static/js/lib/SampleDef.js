@@ -1,21 +1,4 @@
-
-Array.prototype.eve = function(every){
-
-
-	if(every instanceof Object){
-		let copy = this.map(function(synth){
-			if(synth instanceof Function){
-				synth.eve = every;
-				return synth
-			}
-		});
-		return copy
-	}
-}
-
-
-
-const SampleDef = function(name, filename,...args){
+const SampleDef = function(name, filename,...props){
 	function callable(...args){
 
 		if(args.length == 0){
@@ -23,7 +6,7 @@ const SampleDef = function(name, filename,...args){
 		}else if(args.length == 1){
 			let propcopy = Object.assign({},prop);
 			
-			// n , props, effects
+			// n 
 			if(!isNaN(args[0])){
 				let copy = new SampleDef(prop.name, prop.filename, prop);
 				const n = args[0];				
@@ -44,18 +27,17 @@ const SampleDef = function(name, filename,...args){
 				return copy
 			}
 			
-		}else if(args.length == 2){
-			let n = 1;
-			if(Number.isInteger(args[0])){
-				n = args[0]
-			}
-			if(n>1){
-				return Array(n).fill(callable(args[1]))
-			}else{
-				return callable(args[1])
-			}
 		}else{
-			return callable(...args.slice(0,2))			
+			let sequence;
+			if(args.every((p)=>p instanceof Object)){
+				sequence = callable(1)
+				sequence = [sequence].set(...args)[0]
+			}else{
+				sequence = new Array(args[0]).fill(callable(1));
+				sequence = sequence.set(...args.slice(1,args.length))			
+				console.log(...args.slice(1,args.length), sequence)			
+			}
+			return sequence
 		}
 	};
 	
@@ -77,9 +59,9 @@ const SampleDef = function(name, filename,...args){
 		eve:{}
 	};
 	callable._prop = Object.assign({},prop);
-	if (args.length == 1 && args[0] instanceof Object){
-		for (key in args[0]) {
-			prop[key] = args[0][key];
+	if (props.length == 1 && props[0] instanceof Object){
+		for (key in props[0]) {
+			prop[key] = props[0][key];
 		}
 	}
 	callable.prop = Object.assign({},prop);
@@ -90,7 +72,11 @@ const SampleDef = function(name, filename,...args){
 			if(key == "type"){
 				return target.type;
 			}else if(key == "prop"){
-				return target.prop;
+				/*let propl = [];
+				for(p in target.prop){
+					propl.push({[p]: target.prop[p]})
+				}*/
+				return target.prop
 			}else if(target.prop.hasOwnProperty(key)){
 				if( target.prop[key] instanceof Function){
 					return target.prop[key]()
